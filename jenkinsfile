@@ -1,0 +1,53 @@
+pipeline {
+		agent any
+				label {
+							label "built-in"
+							customWorkspace "/mnt/projects"
+				
+				}
+		
+		
+		environment {
+						
+						DOTNET_SDK_PATH = "/usr/share/dotnet"
+            DOCKER_IMAGE_NAME = "my-dotnet-app"
+		
+		}
+		
+		stages {
+		
+				stage ("ClONE_PROJECT"){
+								
+							steps {
+										
+										sh "git clone https://github.com/ankushmangle/samples.git
+							
+							}
+				
+				}
+				
+				stage ("BUILD_PROJECT") {
+							
+								steps {
+											sh "${DOTNET_SDK_PATH}/dotnet restore"
+										  sh "${DOTNET_SDK_PATH}/dotnet build"
+								
+								}
+				
+				}
+				
+				stage ("Dockerized") {
+							
+							steps {
+										 sh "docker build -t ${DOCKER_IMAGE_NAME} ."
+							
+							}
+				
+				
+				}
+		
+		
+		
+		}
+
+}
